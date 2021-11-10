@@ -1,0 +1,325 @@
+<html>
+    <head><style>#maincontainer{position:absolute; top:1000px  }
+
+canvas{border:1px solid blue}
+
+
+
+
+</style>
+        <script src="observerList.js"></script>
+        <script src="subject.js"></script>
+
+
+
+
+    </head>
+    <body>
+
+<canvas id="onlyC" context="2d" style="width:400px;height:400px;" width="400px" height="400"> No Canvas for you! </canvas>
+<div id="text"></div>
+
+
+
+        <script>
+
+
+document.addEventListener("keydown", handleshiftdown);
+function handleshiftdown(event){
+	
+	if(event.shiftKey){
+		document.getElementById("onlyC").addEventListener("mousedown", checkIfInsideCircles);
+		document.addEventListener("keyup", handleshiftup);
+	
+	}
+}
+
+function handleshiftup(){
+	
+	
+		document.getElementById("onlyC").removeEventListener("mousedown", checkIfInsideCircles);
+		document.removeEventListener("keyup", handleshiftup);
+	
+	
+}
+
+var cnv = document.getElementById("onlyC");
+var ctx = cnv.getContext("2d");
+var x1 = cnv.getBoundingClientRect().width / Math.floor(Math.random() * 10);
+var y1 = cnv.getBoundingClientRect().height  / Math.floor(Math.random() * 10) ;
+var x2 = cnv.getBoundingClientRect().width / Math.floor(Math.random() * 10);
+var y2 = cnv.getBoundingClientRect().height  / Math.floor(Math.random() * 10) ;
+var posX;  //cursor position
+var posX2;
+var posY;
+var posY2;
+var newX = x1;
+var newY = y1;
+var newX2 = x2;
+var newY2 = y2;
+var temp;
+var temp1;
+
+var currentSqX;
+var currentSqY;
+
+function checkIfInsideCircles(event){
+
+	
+	posX = event.clientX - cnv.getBoundingClientRect().left;   
+	posY = event.clientY - cnv.getBoundingClientRect().top; 
+
+	
+	for(var i =0 ; i < key; i++){
+
+		
+		
+		if(xpos[i] <= posX && posX < xpos[i]+20){
+			if(ypos[i]<=posY && posY < ypos[i] + 30){
+				
+				currentSqY = i;
+				
+				
+				document.getElementById("onlyC").addEventListener("mousemove", draw);
+				document.getElementById("onlyC").addEventListener("mouseup", handlemouseup);
+				break;
+			}
+
+
+		}
+		
+
+
+}
+
+
+}
+
+
+function handlemouseup(){
+	
+	document.getElementById("onlyC").removeEventListener("mousemove", draw);
+	document.getElementById("onlyC").removeEventListener("mouseup", handlemouseup)
+};
+
+
+
+
+
+function ObserverList() {
+    this.observerList = [];
+}
+
+ObserverList.prototype.add = function(obj) {
+    return this.observerList.push(obj);
+}
+
+ObserverList.prototype.count = function() {
+    return this.observerList.length;
+}
+
+ObserverList.prototype.get = function(idx){
+    if (idx > -1 && idx < this.observerList.length) {
+        return this.observerList[idx];
+    }
+}
+
+ObserverList.prototype.indexOf = function(obj, startIdx) {
+    var i = startIdx;
+    while (i < this.observerList.length) {
+        if (this.observerList[i] === obj) {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
+
+ObserverList.prototype.removeAt = function(idx) {
+    this.observerList.splice(idx, 1);
+}
+
+//-------------------------------------------------
+
+function Subject() {
+    this.observers = new ObserverList();
+}
+
+Subject.prototype.addObserver = function(observer) {
+    this.observers.add(observer);
+}
+
+Subject.prototype.removeObserver = function(observer) {
+    this.observers.removeAt(this.observers.indexOf(observer, 0));
+}
+
+Subject.prototype.notify = function(context) {
+    var observerCount = this.observers.count();
+    for (var i = 0; i < observerCount; i++) {
+        //observer is assumed to have an update function
+        this.observers.get(i).update(context);
+    }
+}
+
+//----------------------------
+
+            var subject = new Subject();
+	
+            subject.addObserver({update: function(data) {
+             if(data==0){
+
+		ctx.clearRect(0,0,cnv.getBoundingClientRect().width,cnv.getBoundingClientRect().height); //clear the rectangle
+		}
+            }})
+
+            subject.addObserver({update: function(data) {
+                if(data==1){			doTheThing(data);
+
+}
+            }})
+         subject.addObserver({update: function(data) {
+		
+                if(data==2){			doTheThing(data);}
+					
+            }})
+         subject.addObserver({update: function(data) {
+		
+                if(data==3){console.log("You pressed " + data);	doTheThing(data);}
+            }})
+         subject.addObserver({update: function(data) {
+		
+                if(data==4){console.log("You pressed " + data);	doTheThing(data);}
+            }})
+         subject.addObserver({update: function(data) {
+		
+                if(data==5){console.log("You pressed " + data); doTheThing(data);	}
+            }})
+
+
+
+
+	var xpos = [];
+	var ypos = [];
+	
+	var key;
+function doTheThing(info){
+	key = info;
+	ctx.clearRect(0,0,cnv.getBoundingClientRect().width,cnv.getBoundingClientRect().height); //clear the rectangle
+	xpos[0] = (cnv.getBoundingClientRect().width )/ (10);
+		
+	ypos[0] = (cnv.getBoundingClientRect().height) / (10);
+		ctx.fillStyle = "black";
+		ctx.fillRect(xpos[0]   ,  ypos[0]    ,20, 30);
+		
+		ctx.fill();
+		ctx.stroke();
+	
+		
+	for(var i = 1; i <info ; i++){
+		
+		xpos[i] = (Math.random() * cnv.getBoundingClientRect().width );
+		
+		ypos[i] = Math.random() * cnv.getBoundingClientRect().height ;
+		
+		
+		var myVar = "#" + (i + Math.floor((Math.random() * 99))) + "" + (i + Math.floor((Math.random() * 99))) + "" +(i + Math.floor((Math.random() * 99))); 
+
+		ctx.fillStyle = myVar;
+		ctx.fillRect(xpos[i]   ,  ypos[i]    ,20, 30);
+		ctx.fill();
+		ctx.stroke();
+		
+}
+
+
+
+}
+//make it work when you click on the first box
+//make it move the box you click instead of the last one
+
+
+function draw(event){ //every movement of the mouse we will:
+
+	ctx.clearRect(0,0,cnv.getBoundingClientRect().width,cnv.getBoundingClientRect().height); //clear the rectangle
+	
+	
+	posX = event.clientX - cnv.getBoundingClientRect().left;   //redraw the current circle at the mouse position
+	posY = event.clientY - cnv.getBoundingClientRect().top; 
+		
+	
+	for(var i = 0; i < key  ; i++){
+		
+		
+				
+			
+				if(xpos[currentSqX] != xpos[i] && ypos[currentSqY] != ypos[i]){
+
+				
+				var myVar = "#" + (i + Math.floor((Math.random() * 99))) + "" + (i + Math.floor((Math.random() * 99))) + "" +(i + Math.floor((Math.random() * 99))); 
+
+				ctx.fillStyle = myVar;
+				ctx.fillRect(xpos[i]   ,  ypos[i]    ,20, 30);
+				ctx.fill();
+				ctx.stroke();
+				
+				}
+		}
+
+		
+
+		
+		
+		
+
+	
+
+
+	
+	ypos[currentSqY] = posY;
+	xpos[currentSqX] = posX;
+		
+		ctx.fillStyle = "orange";
+		ctx.fillRect(xpos[currentSqX]   , ypos[currentSqY]    ,20, 30);
+		ctx.fill();
+		ctx.stroke();
+		
+		
+	
+
+
+}
+
+
+
+
+
+
+//---------------------------------------------
+
+            window.onload = function(){
+                
+                
+                
+		'use strict';
+		var key;
+		document.addEventListener('keypress', (event) => {
+  				const keyName = event.key;
+				subject.notify(keyName);
+				key = keyName;
+				});
+                
+            }
+
+
+
+
+
+
+
+
+        </script>
+
+
+    </body>
+</html> 
